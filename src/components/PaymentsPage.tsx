@@ -39,9 +39,28 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   const [upiLink, setUpiLink] = useState('');
   const [qrCode, setQrCode] = useState('');
 
+  const [currentBill, setCurrentBill] = useState<number | null>(null);
+
   useEffect(() => {
     loadPaymentHistory();
+    
+    // Load current month bill from canonical source
+    const loadCurrentBill = async () => {
+      try {
+        const amount = await paymentsApi.getCurrentMonthBill();
+        setCurrentBill(amount);
+      } catch (err) {
+        console.error('Failed to load current bill:', err);
+      }
+    };
+
+    loadCurrentBill();
   }, []);
+
+  // Debug logging to help trace mismatched values seen in screenshots
+  // Note: PaymentsPage relies on the `actualBill` prop passed from the parent for the canonical
+  // current month bill. Parent should ensure it has loaded the aggregated usage before
+  // rendering this page to avoid transient fallbacks.
 
   const loadPaymentHistory = async () => {
     try {
@@ -162,14 +181,14 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
             <div className="mb-6">
               <p className="text-sm text-gray-600 mb-2">Amount Due</p>
               <p className="text-4xl font-bold text-blue-600">
-                {formatCurrency(actualBill, currency)}
+                {formatCurrency(currentBill ?? actualBill, currency)}
               </p>
               <p className="text-sm text-gray-600 mt-2">
                 Due date: Nov 30, 2024
               </p>
             </div>
             <Button 
-              onClick={() => handlePayClick(actualBill, 'actual')}
+              onClick={() => handlePayClick(currentBill ?? actualBill, 'actual')}
               className="w-full gap-2"
               size="lg"
             >

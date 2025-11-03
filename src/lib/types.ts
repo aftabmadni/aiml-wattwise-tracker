@@ -79,6 +79,7 @@ export interface PaymentOrder {
   status: 'created' | 'authorized' | 'captured' | 'failed';
   createdAt: string;
   razorpayOrderId?: string;
+  currentMonthBill?: number; // Added to sync UI with current bill
 }
 
 export interface PaymentHistory {

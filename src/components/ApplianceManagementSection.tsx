@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { paymentsApi } from '../lib/mockApi';
 import { Button } from './ui/button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, Cell } from 'recharts';
 import { Plus, Zap, DollarSign, TrendingUp, Lightbulb, Edit, Trash2 } from 'lucide-react';
@@ -25,6 +26,14 @@ export const ApplianceManagementSection: React.FC<ApplianceManagementSectionProp
   const costPerKWh = 8; // ₹8 per kWh
   const summary = calculateApplianceSummary(appliances, costPerKWh);
   const insights = generateApplianceInsights(appliances, summary);
+
+  // Update canonical current month bill whenever appliance summary changes
+  useEffect(() => {
+    if (summary.totalMonthlyCost > 0) {
+      paymentsApi.updateCurrentMonthBill(summary.totalMonthlyCost)
+        .catch(console.error);
+    }
+  }, [summary.totalMonthlyCost]);
 
   // Prepare chart data
   const chartData = appliances.map(appliance => {

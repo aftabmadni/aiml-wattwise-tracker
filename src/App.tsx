@@ -12,7 +12,7 @@ import { PaymentsPage } from './components/PaymentsPage';
 import { SettingsPage } from './components/SettingsPage';
 import { NotificationCenter } from './components/NotificationCenter';
 import { Toaster } from './components/ui/sonner';
-import { notificationsApi, insightsApi } from './lib/mockApi';
+import { notificationsApi, insightsApi, usageApi } from './lib/mockApi';
 
 type AuthScreen = 'login' | 'register' | 'forgot-password';
 type AppPage = 'dashboard' | 'reports' | 'payments' | 'settings';
@@ -25,12 +25,14 @@ function AppContent() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
   const [prediction, setPrediction] = useState<any>(null);
+  const [actualBillAmount, setActualBillAmount] = useState<number | null>(null);
 
   // Load notifications and prediction on mount
   React.useEffect(() => {
     if (isAuthenticated) {
       loadNotifications();
       loadPrediction();
+      loadActualBill();
     }
   }, [isAuthenticated]);
 
@@ -49,6 +51,15 @@ function AppContent() {
       setPrediction(data);
     } catch (error) {
       console.error('Failed to load prediction:', error);
+    }
+  };
+
+  const loadActualBill = async () => {
+    try {
+      const month = await usageApi.getAggregatedUsage('month');
+      setActualBillAmount(month.totalCost);
+    } catch (error) {
+      console.error('Failed to load actual bill:', error);
     }
   };
 
@@ -130,7 +141,7 @@ function AppContent() {
         {currentPage === 'payments' && (
           <PaymentsPage
             predictedBill={prediction?.predictedCost || 2284}
-            actualBill={2410}
+            actualBill={actualBillAmount ?? 2410}
             currency={currency}
           />
         )}

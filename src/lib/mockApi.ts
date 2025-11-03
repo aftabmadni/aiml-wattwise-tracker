@@ -33,6 +33,7 @@ const delay = (ms: number = 300) => new Promise(resolve => setTimeout(resolve, m
 let currentUser: User | null = null;
 let usageDataCache: UsageData[] | null = null;
 let authToken: string | null = null;
+let currentMonthBill: number = 3744; // Initialize with appliance-calculated amount
 
 // Authentication API
 export const authApi = {
@@ -209,17 +210,33 @@ export const insightsApi = {
 
 // Payments API
 export const paymentsApi = {
+  // Get current month's bill amount (single source of truth)
+  async getCurrentMonthBill(): Promise<number> {
+    await delay(200);
+    return currentMonthBill;
+  },
+
+  // Update current month's bill (called when appliance totals change)
+  async updateCurrentMonthBill(newAmount: number): Promise<void> {
+    await delay(200);
+    currentMonthBill = newAmount;
+  },
+
   async createOrder(amount: number, billType: 'predicted' | 'actual'): Promise<PaymentOrder> {
     await delay(500);
+    
+    // For actual bills, always use the canonical current month bill
+    const orderAmount = billType === 'actual' ? currentMonthBill : amount;
     
     // Mock Razorpay order creation
     const order: PaymentOrder = {
       id: 'order_' + Date.now(),
-      amount,
+      amount: orderAmount,
       currency: 'INR',
       status: 'created',
       createdAt: new Date().toISOString(),
-      razorpayOrderId: 'order_razorpay_' + Date.now()
+      razorpayOrderId: 'order_razorpay_' + Date.now(),
+      currentMonthBill // Include for UI sync
     };
     
     return order;
