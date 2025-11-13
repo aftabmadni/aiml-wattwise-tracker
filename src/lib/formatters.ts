@@ -70,7 +70,10 @@ export const formatRelativeTime = (dateString: string): string => {
 };
 
 export const formatPercentage = (value: number, decimals: number = 0): string => {
-  return `${value.toFixed(decimals)}%`;
+    if (value === undefined || value === null || isNaN(value)) {
+      return '--%';
+    }
+    return `${value.toFixed(decimals)}%`;
 };
 
 export const formatHour = (hour: number): string => {

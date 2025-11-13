@@ -207,7 +207,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 {formatCurrency(currentBill ?? actualBill, currency)}
               </p>
               <div className="text-sm text-gray-600 mt-2 space-y-1">
-                <p>Due date: Nov 30, 2024</p>
+                <p>Due date: Nov 30, 2025</p>
                 <p>
                   Total consumption:{" "}
                   {((currentBill ?? actualBill) / 8).toFixed(1)} kWh
@@ -249,7 +249,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                 {formatCurrency(predictedBill, currency)}
               </p>
               <div className="text-sm text-gray-600 mt-2 space-y-1">
-                <p>For December 2024</p>
+                <p>For December 2025</p>
                 <p>Predicted usage: {(predictedBill / 8).toFixed(1)} kWh</p>
               </div>
             </div>
@@ -302,7 +302,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                       {getStatusBadge(payment.status)}
                     </div>
                     <Button size="sm" variant="ghost">
-                      <Download size={14} />
+                      
                     </Button>
                   </div>
                 </div>

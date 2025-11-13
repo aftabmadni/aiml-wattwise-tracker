@@ -104,6 +104,21 @@ export const generateApplianceInsights = (
 ): string[] => {
   const insights: string[] = [];
 
+  // Only generate insights for appliances present in the user's list
+  if (appliances.length === 0) {
+    return [
+      'Add appliances to get personalized AI-powered insights based on your usage.'
+    ];
+  }
+
+  // Only generate insights for appliances present in the user's list
+  if (appliances.length === 0) {
+    return [
+      'Add appliances to get personalized AI-powered insights based on your usage.'
+    ];
+  }
+
+  // Always show top consumer insight for the user's added appliance
   if (summary.topConsumer) {
     insights.push(
       `Your ${summary.topConsumer.appliance.name} consumes the most energy at ${
@@ -114,6 +129,7 @@ export const generateApplianceInsights = (
     );
   }
 
+  // Only show high usage insights for appliances the user has actually added
   const highUsageAppliances = appliances.filter((a) => a.hoursPerDay > 8);
   if (highUsageAppliances.length > 0) {
     const applianceNames = highUsageAppliances.map((a) => a.name).join(", ");
@@ -135,6 +151,7 @@ export const generateApplianceInsights = (
     );
   }
 
+  // Only show total consumption insight if the user's appliances exceed threshold
   if (summary.totalMonthlyKWh > 300) {
     insights.push(
       `Your total consumption is ${summary.totalMonthlyKWh} kWh/month. Switching to energy-efficient appliances could reduce this by 25-30%.`

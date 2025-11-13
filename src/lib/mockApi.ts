@@ -44,7 +44,9 @@ export const authApi = {
     password: string
   ): Promise<{ user: User; token: string }> {
     await delay(500);
-    const found = users.find(u => u.email === email && u.password === password);
+    const found = users.find(
+      (u) => u.email === email && u.password === password
+    );
     if (found) {
       authToken = "mock-jwt-token-" + Date.now();
       currentUser = found;
@@ -60,7 +62,7 @@ export const authApi = {
   ): Promise<{ user: User; token: string }> {
     await delay(500);
     // Prevent duplicate registration
-    if (users.find(u => u.email === email)) {
+    if (users.find((u) => u.email === email)) {
       throw new Error("Email already registered");
     }
     const newUser: User = {
@@ -206,7 +208,9 @@ export const insightsApi = {
     // Use user id/email as seed for prediction
     let seed = 1;
     if (currentUser && currentUser.email) {
-      seed = currentUser.email.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+      seed = currentUser.email
+        .split("")
+        .reduce((acc, c) => acc + c.charCodeAt(0), 0);
     }
     return generatePrediction(seed);
   },

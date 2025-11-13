@@ -46,7 +46,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
             <Zap className="w-7 h-7 text-white" />
           </div>
           <span className="text-3xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            WattWise
+            Eletricity Usage Tracker
           </span>
         </div>
 

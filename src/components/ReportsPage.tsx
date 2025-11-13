@@ -38,11 +38,11 @@ export const ReportsPage: React.FC = () => {
 
   const months = [
     getCurrentMonth(),
-    "October 2024",
-    "September 2024",
-    "August 2024",
-    "July 2024",
-    "June 2024",
+    "October 2025",
+    "September 2025",
+    "August 2025",
+    "July 2025",
+    "June 2025",
   ];
 
   const handleExportPDF = async () => {
@@ -79,7 +79,7 @@ export const ReportsPage: React.FC = () => {
     totalUnits: 301.2,
     totalCost: 2410,
     avgDaily: 10.04,
-    peakDay: "Oct 15, 2024",
+    peakDay: "Oct 15, 2025",
     savingsVsLastMonth: 12.5,
     co2Saved: 34.5,
   };
@@ -286,13 +286,13 @@ export const ReportsPage: React.FC = () => {
         <CardContent>
           <div className="space-y-3">
             {[
-              { month: "October 2024", date: "5 days ago", type: "PDF" },
+              { month: "October 2025", date: "", type: "PDF" },
               {
-                month: "September 2024",
-                date: "35 days ago",
+                month: "September 2025",
+                date: "",
                 type: "PDF & CSV",
               },
-              { month: "August 2024", date: "65 days ago", type: "PDF" },
+              { month: "August 2025", date: "", type: "PDF" },
             ].map((report, index) => (
               <div
                 key={index}
@@ -308,7 +308,7 @@ export const ReportsPage: React.FC = () => {
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">{report.type}</Badge>
                   <Button size="sm" variant="ghost">
-                    <Download size={14} />
+                   
                   </Button>
                 </div>
               </div>

@@ -202,9 +202,9 @@ export const generatePaymentHistory = (): PaymentHistory[] => [
     status: "success",
     method: "razorpay",
     transactionId: "txn_razorpay_001",
-    billMonth: "October 2024",
+    billMonth: "October 2025",
     paidAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    receipt: "RCP-OCT-2024-001",
+    receipt: "RCP-OCT-2025-001",
   },
   {
     id: "pay-002",
@@ -214,9 +214,9 @@ export const generatePaymentHistory = (): PaymentHistory[] => [
     status: "success",
     method: "upi",
     transactionId: "upi_001",
-    billMonth: "September 2024",
+    billMonth: "September 2025",
     paidAt: new Date(Date.now() - 35 * 24 * 60 * 60 * 1000).toISOString(),
-    receipt: "RCP-SEP-2024-002",
+    receipt: "RCP-SEP-2025-002",
   },
   {
     id: "pay-003",
@@ -226,9 +226,9 @@ export const generatePaymentHistory = (): PaymentHistory[] => [
     status: "success",
     method: "razorpay",
     transactionId: "txn_razorpay_002",
-    billMonth: "August 2024",
+    billMonth: "August 2025",
     paidAt: new Date(Date.now() - 65 * 24 * 60 * 60 * 1000).toISOString(),
-    receipt: "RCP-AUG-2024-003",
+    receipt: "RCP-AUG-2025-003",
   },
 ];
 
@@ -240,7 +240,9 @@ export const calculateCarbonFootprint = (
   return {
     co2Kg: parseFloat(co2Kg.toFixed(2)),
     treesEquivalent: parseFloat(treesEquivalent.toFixed(2)),
-    comparisonText: `Equivalent to ${(co2Kg / 411).toFixed(1)} km driven by car`,
+    comparisonText: `Equivalent to ${(co2Kg / 411).toFixed(
+      1
+    )} km driven by car`,
   };
 };
 
