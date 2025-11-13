@@ -813,10 +813,10 @@ export const AIInsightsBox: React.FC<AIInsightsBoxProps> = ({
                   transition={{ delay: 0.4 }}
                   className="grid grid-cols-2 gap-4 mt-6"
                 >
-                  <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 text-center">
+                  {/* <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 text-center">
                     <div className="text-2xl font-bold text-green-600">46.8 kWh</div>
                     <div className="text-sm text-gray-600">Current Usage</div>
-                  </div>
+                  </div> */}
                   <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 text-center">
                     <div className="text-2xl font-bold text-blue-600">12.5%</div>
                     <div className="text-sm text-gray-600">Expected Savings</div>
