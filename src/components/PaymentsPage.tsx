@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Magic3DInterface from "./Magic3DInterface";
 import {
   Card,
   CardContent,
@@ -28,6 +29,8 @@ import { Badge } from "./ui/badge";
 import { paymentsApi } from "../lib/mockApi";
 import { PaymentHistory } from "../lib/types";
 import { formatCurrency, formatDate } from "../lib/formatters";
+import { useAppliances } from "../contexts/ApplianceContext";
+import { generateBillPDF } from "../lib/generateBillPDF";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
@@ -42,6 +45,7 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
   actualBill,
   currency,
 }) => {
+  const { appliances } = useAppliances();
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistory[]>([]);
   const [loading, setLoading] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
@@ -67,6 +71,13 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
         setCurrentBill(amount);
       } catch (err) {
         console.error("Failed to load current bill:", err);
+        // ...existing code...
+        return (
+          <div className="space-y-6 w-full max-w-full">
+            <Magic3DInterface />
+            {/* ...existing payments content... */}
+          </div>
+        );
       }
     };
 
@@ -301,8 +312,13 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                       </p>
                       {getStatusBadge(payment.status)}
                     </div>
-                    <Button size="sm" variant="ghost">
-                      
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => generateBillPDF({ appliances, payment, currency })}
+                      className="gap-2"
+                    >
+                      <Download size={16} /> Download Bill
                     </Button>
                   </div>
                 </div>

@@ -16,10 +16,11 @@ export const seededRandom = (seed: number) => {
   return x - Math.floor(x);
 };
 
-export const generateUsageData = (months: number = 12): UsageData[] => {
+export const generateUsageData = (months: number = 12, appliances: string[] = []): UsageData[] => {
   const data: UsageData[] = [];
   const now = new Date();
-  const devicesIds = [
+  // Use only the provided appliance IDs, or fallback to mock if none
+  const devicesIds = appliances.length > 0 ? appliances : [
     "ac-1",
     "fridge-1",
     "heater-1",
@@ -47,7 +48,7 @@ export const generateUsageData = (months: number = 12): UsageData[] => {
         unitsConsumed: parseFloat(unitsConsumed.toFixed(2)),
         deviceId: devicesIds[hour % devicesIds.length],
         temperature: 20 + seededRandom(day * 24 + hour + 100) * 15,
-        regionCode: "IN-MH",
+        regionCode: "IN-KA",
         cost: parseFloat(cost.toFixed(2)),
       });
     }
@@ -72,6 +73,7 @@ export const mockUser: User = {
     },
     language: "en",
   },
+  appliances: [],
 };
 
 export const generateAIInsights = (): AIInsight[] => [

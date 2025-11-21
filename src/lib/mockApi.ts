@@ -133,8 +133,15 @@ export const usageApi = {
   ): Promise<UsageData[]> {
     await delay(400);
 
+    // Get appliance IDs from currentUser (simulate real appliances added)
+    let applianceIds: string[] = [];
+    if (currentUser && Array.isArray(currentUser.appliances)) {
+      applianceIds = currentUser.appliances.map((a: any) => a.id);
+    }
+
+    // Only use real appliances; if none, return empty data
     if (!usageDataCache) {
-      usageDataCache = generateUsageData(12);
+      usageDataCache = applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
     }
 
     const now = new Date();
@@ -165,8 +172,13 @@ export const usageApi = {
   ): Promise<AggregatedUsage> {
     await delay(300);
 
+    let applianceIds: string[] = [];
+    if (currentUser && Array.isArray(currentUser.appliances)) {
+      applianceIds = currentUser.appliances.map((a: any) => a.id);
+    }
+    // Only use real appliances; if none, return empty data
     if (!usageDataCache) {
-      usageDataCache = generateUsageData(12);
+      usageDataCache = applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
     }
 
     return calculateAggregatedUsage(usageDataCache, period);
@@ -222,8 +234,12 @@ export const insightsApi = {
 
   async getCarbonFootprint(): Promise<CarbonFootprint> {
     await delay(300);
+    let applianceIds: string[] = [];
+    if (currentUser && Array.isArray(currentUser.appliances)) {
+      applianceIds = currentUser.appliances.map((a: any) => a.id);
+    }
     if (!usageDataCache) {
-      usageDataCache = generateUsageData(12);
+      usageDataCache = applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
     }
 
     const monthData = await usageApi.getAggregatedUsage("month");

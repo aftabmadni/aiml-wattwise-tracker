@@ -1,3 +1,4 @@
+import Magic3DInterface from "./Magic3DInterface";
 // import React, { useState } from 'react';
 // import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 // import { Button } from './ui/button';
@@ -437,6 +438,13 @@ export const SettingsPage: React.FC = () => {
     if (!validTypes.includes(file.type)) {
       toast.error('Please select a valid image file (JPG, PNG, GIF)');
       return;
+      // ...existing code...
+      return (
+        <div>
+          <Magic3DInterface />
+          {/* ...existing settings content... */}
+        </div>
+      );
     }
 
     // Validate file size (2MB max)

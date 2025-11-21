@@ -25,6 +25,7 @@ export interface User {
   avatar?: string;
   createdAt: string;
   preferences: UserPreferences;
+  appliances?: any[]; // Array of appliance objects or IDs
 }
 
 export interface UserPreferences {

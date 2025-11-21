@@ -28,6 +28,7 @@ import { BarChart3, Zap } from "lucide-react";
 
 interface DashboardPageProps {
   currency: "INR" | "USD" | "EUR";
+  // ...existing code...
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {

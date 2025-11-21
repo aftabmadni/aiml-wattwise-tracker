@@ -34,7 +34,7 @@ export const useAppliances = () => {
 export const ApplianceProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const [appliances, setAppliances] = useState<Appliance[]>([]);
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -88,22 +88,32 @@ export const ApplianceProvider: React.FC<{ children: React.ReactNode }> = ({
       id: `appliance-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
       createdAt: new Date().toISOString(),
     };
-    setAppliances((prev) => [...prev, newAppliance]);
+    setAppliances((prev) => {
+      const updated = [...prev, newAppliance];
+      if (user) updateUser({ appliances: updated });
+      return updated;
+    });
   };
 
   const updateAppliance = (
     id: string,
     applianceData: Omit<Appliance, "id" | "createdAt">
   ) => {
-    setAppliances((prev) =>
-      prev.map((appliance) =>
+    setAppliances((prev) => {
+      const updated = prev.map((appliance) =>
         appliance.id === id ? { ...appliance, ...applianceData } : appliance
-      )
-    );
+      );
+      if (user) updateUser({ appliances: updated });
+      return updated;
+    });
   };
 
   const deleteAppliance = (id: string) => {
-    setAppliances((prev) => prev.filter((appliance) => appliance.id !== id));
+    setAppliances((prev) => {
+      const updated = prev.filter((appliance) => appliance.id !== id);
+      if (user) updateUser({ appliances: updated });
+      return updated;
+    });
   };
 
   const completeOnboarding = () => {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Magic3DInterface from "./Magic3DInterface";
 import {
   Card,
   CardContent,
@@ -30,9 +31,15 @@ import {
   formatUnits,
 } from "../lib/formatters";
 import { toast } from "sonner";
+import { useAppliances } from "../contexts/ApplianceContext";
+// ...existing code...
+import { generateUsageReportPDF } from "../lib/generateBillPDF";
+import { generateBillPDF } from "../lib/generateBillPDF";
+import { calculateApplianceUsage } from "../lib/applianceTypes";
 import { Badge } from "./ui/badge";
 
 export const ReportsPage: React.FC = () => {
+    const { appliances } = useAppliances();
   const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
   const [loading, setLoading] = useState(false);
 
@@ -48,16 +55,25 @@ export const ReportsPage: React.FC = () => {
   const handleExportPDF = async () => {
     setLoading(true);
     try {
-      const blob = await reportsApi.exportToPDF(selectedMonth);
-      downloadFile(
-        blob,
-        `wattwise-report-${selectedMonth.replace(" ", "-")}.pdf`
-      );
+      // Calculate usage for each appliance for the report
+      const usageData: { [applianceId: string]: number } = {};
+      appliances.forEach((a) => {
+        const usage = calculateApplianceUsage(a);
+        usageData[a.id] = usage.monthlyKWh;
+      });
+      generateUsageReportPDF({ appliances, month: selectedMonth, usageData });
       toast.success("PDF report downloaded successfully");
     } catch (error) {
       toast.error("Failed to generate PDF report");
     } finally {
       setLoading(false);
+      // ...existing code...
+      return (
+        <div className="space-y-6 w-full">
+          <Magic3DInterface />
+          {/* ...existing reports content... */}
+        </div>
+      );
     }
   };
 
@@ -185,9 +201,9 @@ export const ReportsPage: React.FC = () => {
       </Card>
 
       {/* Export Options */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* PDF Report */}
-        <Card>
+      <div className="w-full mb-6">
+        {/* PDF Report - Expanded Width */}
+        <Card className="w-full">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-red-600" />
@@ -226,53 +242,7 @@ export const ReportsPage: React.FC = () => {
           </CardContent>
         </Card>
 
-        {/* CSV Export */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileSpreadsheet className="w-5 h-5 text-green-600" />
-              Raw Data (CSV)
-            </CardTitle>
-            <CardDescription>
-              Export raw usage data for custom analysis
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2 text-sm text-gray-600">
-              <p className="flex items-center gap-2">
-                ✓ Timestamp-level granular data
-              </p>
-              <p className="flex items-center gap-2">✓ Units consumed (kWh)</p>
-              <p className="flex items-center gap-2">✓ Cost breakdown</p>
-              <p className="flex items-center gap-2">
-                ✓ Device ID and metadata
-              </p>
-              <p className="flex items-center gap-2">
-                ✓ Compatible with Excel & tools
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Button
-                onClick={() => handleExportCSV("month")}
-                disabled={loading}
-                variant="outline"
-                className="w-full gap-2"
-              >
-                <Download size={16} />
-                Export Month Data (CSV)
-              </Button>
-              <Button
-                onClick={() => handleExportCSV("year")}
-                disabled={loading}
-                variant="outline"
-                className="w-full gap-2"
-              >
-                <Download size={16} />
-                Export Year Data (CSV)
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      
       </div>
 
       {/* Recent Reports */}
@@ -290,7 +260,7 @@ export const ReportsPage: React.FC = () => {
               {
                 month: "September 2025",
                 date: "",
-                type: "PDF & CSV",
+                type: "PDF",
               },
               { month: "August 2025", date: "", type: "PDF" },
             ].map((report, index) => (
@@ -307,8 +277,32 @@ export const ReportsPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2">
                   <Badge variant="secondary">{report.type}</Badge>
-                  <Button size="sm" variant="ghost">
-                   
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-2"
+                    onClick={() => {
+                      // Generate random appliances for the month
+                      const applianceNames = [
+                        "Air Conditioner", "Refrigerator", "Water Heater", "Lighting", "Television", "Washing Machine", "Microwave", "Fan", "Laptop", "Oven"
+                      ];
+                      const randomAppliances = Array.from({ length: 4 + Math.floor(Math.random() * 3) }, (_, idx) => ({
+                        id: `appliance-${report.month}-${idx}`,
+                        name: applianceNames[Math.floor(Math.random() * applianceNames.length)],
+                        powerWatts: Math.floor(Math.random() * 1500 + 100),
+                        hoursPerDay: Math.floor(Math.random() * 10 + 1),
+                        daysPerMonth: Math.floor(Math.random() * 30 + 1),
+                        createdAt: new Date().toISOString(),
+                      }));
+                      // Generate random usage data
+                      const usageData = {};
+                      randomAppliances.forEach((a) => {
+                        usageData[a.id] = Math.random() * 100 + 10;
+                      });
+                      generateUsageReportPDF({ appliances: randomAppliances, month: report.month, usageData });
+                    }}
+                  >
+                    <Download size={16} /> Download Report
                   </Button>
                 </div>
               </div>
