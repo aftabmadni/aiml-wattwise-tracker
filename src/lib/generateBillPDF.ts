@@ -15,7 +15,13 @@ export function generateBillPDF({
   doc.text(`Month: ${payment.billMonth}`, 14, 28);
   doc.text(`Amount Paid: ${payment.amount} ${currency}`, 14, 36);
   doc.text(`Payment Method: ${payment.method.toUpperCase()}`, 14, 44);
-  doc.text(`Status: ${payment.status.charAt(0).toUpperCase() + payment.status.slice(1)}`, 14, 52);
+  doc.text(
+    `Status: ${
+      payment.status.charAt(0).toUpperCase() + payment.status.slice(1)
+    }`,
+    14,
+    52
+  );
   doc.text(`Paid On: ${new Date(payment.paidAt).toLocaleDateString()}`, 14, 60);
 
   const tableData = appliances.map((a, idx) => [
@@ -56,7 +62,11 @@ export function generateUsageReportPDF({
   doc.text("Monthly Appliance Usage Report", 14, 18);
   doc.setFontSize(12);
   doc.text(`Month: ${month}`, 14, 28);
-  doc.text("This report shows only appliances you have added and their total energy usage.", 14, 36);
+  doc.text(
+    "This report shows only appliances you have added and their total energy usage.",
+    14,
+    36
+  );
 
   const tableData = appliances.map((a, idx) => [
     idx + 1,
@@ -69,7 +79,16 @@ export function generateUsageReportPDF({
 
   autoTable(doc, {
     startY: 50,
-    head: [["#", "Appliance", "Power", "Daily Usage", "Days Active", "Total kWh Used"]],
+    head: [
+      [
+        "#",
+        "Appliance",
+        "Power",
+        "Daily Usage",
+        "Days Active",
+        "Total kWh Used",
+      ],
+    ],
     body: tableData,
     theme: "grid",
     headStyles: { fillColor: [59, 130, 246] },

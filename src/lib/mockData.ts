@@ -16,18 +16,17 @@ export const seededRandom = (seed: number) => {
   return x - Math.floor(x);
 };
 
-export const generateUsageData = (months: number = 12, appliances: string[] = []): UsageData[] => {
+export const generateUsageData = (
+  months: number = 12,
+  appliances: string[] = []
+): UsageData[] => {
   const data: UsageData[] = [];
   const now = new Date();
   // Use only the provided appliance IDs, or fallback to mock if none
-  const devicesIds = appliances.length > 0 ? appliances : [
-    "ac-1",
-    "fridge-1",
-    "heater-1",
-    "lights-1",
-    "tv-1",
-    "washer-1",
-  ];
+  const devicesIds =
+    appliances.length > 0
+      ? appliances
+      : ["ac-1", "fridge-1", "heater-1", "lights-1", "tv-1", "washer-1"];
   for (let day = months * 30; day >= 0; day--) {
     for (let hour = 0; hour < 24; hour++) {
       const timestamp = new Date(

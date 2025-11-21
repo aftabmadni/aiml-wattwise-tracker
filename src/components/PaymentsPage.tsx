@@ -315,7 +315,9 @@ export const PaymentsPage: React.FC<PaymentsPageProps> = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => generateBillPDF({ appliances, payment, currency })}
+                      onClick={() =>
+                        generateBillPDF({ appliances, payment, currency })
+                      }
                       className="gap-2"
                     >
                       <Download size={16} /> Download Bill

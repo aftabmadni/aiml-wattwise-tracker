@@ -88,12 +88,12 @@ export const DeviceBreakdownChart: React.FC<DeviceBreakdownChartProps> = ({
   };
 
   return (
-    <Card>
+    <Card className="max-w-6xl w-full mx-auto">
       <CardHeader>
         <CardTitle>Device-Level Breakdown</CardTitle>
         <CardDescription>Device-wise usage and cost (₹8/kWh)</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Pie Chart */}
           <div className="h-80">

@@ -107,14 +107,14 @@ export const generateApplianceInsights = (
   // Only generate insights for appliances present in the user's list
   if (appliances.length === 0) {
     return [
-      'Add appliances to get personalized AI-powered insights based on your usage.'
+      "Add appliances to get personalized AI-powered insights based on your usage.",
     ];
   }
 
   // Only generate insights for appliances present in the user's list
   if (appliances.length === 0) {
     return [
-      'Add appliances to get personalized AI-powered insights based on your usage.'
+      "Add appliances to get personalized AI-powered insights based on your usage.",
     ];
   }
 

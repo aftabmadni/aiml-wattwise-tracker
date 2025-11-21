@@ -39,7 +39,7 @@ import { calculateApplianceUsage } from "../lib/applianceTypes";
 import { Badge } from "./ui/badge";
 
 export const ReportsPage: React.FC = () => {
-    const { appliances } = useAppliances();
+  const { appliances } = useAppliances();
   const [selectedMonth, setSelectedMonth] = useState(getCurrentMonth());
   const [loading, setLoading] = useState(false);
 
@@ -241,8 +241,6 @@ export const ReportsPage: React.FC = () => {
             </Button>
           </CardContent>
         </Card>
-
-      
       </div>
 
       {/* Recent Reports */}
@@ -284,22 +282,40 @@ export const ReportsPage: React.FC = () => {
                     onClick={() => {
                       // Generate random appliances for the month
                       const applianceNames = [
-                        "Air Conditioner", "Refrigerator", "Water Heater", "Lighting", "Television", "Washing Machine", "Microwave", "Fan", "Laptop", "Oven"
+                        "Air Conditioner",
+                        "Refrigerator",
+                        "Water Heater",
+                        "Lighting",
+                        "Television",
+                        "Washing Machine",
+                        "Microwave",
+                        "Fan",
+                        "Laptop",
+                        "Oven",
                       ];
-                      const randomAppliances = Array.from({ length: 4 + Math.floor(Math.random() * 3) }, (_, idx) => ({
-                        id: `appliance-${report.month}-${idx}`,
-                        name: applianceNames[Math.floor(Math.random() * applianceNames.length)],
-                        powerWatts: Math.floor(Math.random() * 1500 + 100),
-                        hoursPerDay: Math.floor(Math.random() * 10 + 1),
-                        daysPerMonth: Math.floor(Math.random() * 30 + 1),
-                        createdAt: new Date().toISOString(),
-                      }));
+                      const randomAppliances = Array.from(
+                        { length: 4 + Math.floor(Math.random() * 3) },
+                        (_, idx) => ({
+                          id: `appliance-${report.month}-${idx}`,
+                          name: applianceNames[
+                            Math.floor(Math.random() * applianceNames.length)
+                          ],
+                          powerWatts: Math.floor(Math.random() * 1500 + 100),
+                          hoursPerDay: Math.floor(Math.random() * 10 + 1),
+                          daysPerMonth: Math.floor(Math.random() * 30 + 1),
+                          createdAt: new Date().toISOString(),
+                        })
+                      );
                       // Generate random usage data
                       const usageData = {};
                       randomAppliances.forEach((a) => {
                         usageData[a.id] = Math.random() * 100 + 10;
                       });
-                      generateUsageReportPDF({ appliances: randomAppliances, month: report.month, usageData });
+                      generateUsageReportPDF({
+                        appliances: randomAppliances,
+                        month: report.month,
+                        usageData,
+                      });
                     }}
                   >
                     <Download size={16} /> Download Report

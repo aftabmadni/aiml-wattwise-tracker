@@ -36,16 +36,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
   const [error, setError] = useState<string | null>(null);
 
   // Data state
-  const [usageData, setUsageData] = useState<UsageData[]>([]);
+  // usageData now comes from ApplianceContext
+  const { appliances, usageData } = useAppliances();
   // Removed todayUsage and weekUsage state, now calculated from appliances
   const [monthUsage, setMonthUsage] = useState<AggregatedUsage | null>(null);
   const [previousMonthUsage, setPreviousMonthUsage] =
     useState<AggregatedUsage | null>(null);
   const [prediction, setPrediction] = useState<Prediction | null>(null);
   const [insights, setInsights] = useState<AIInsight[]>([]);
-  const { appliances } = useAppliances();
-  const [carbonFootprint, setCarbonFootprint] =
-    useState<CarbonFootprint | null>(null);
+  // appliances and usageData are destructured together below
+  // Get carbonFootprint from context
+  const { carbonFootprint } = useAppliances();
   const [savingStreak, setSavingStreak] = useState<SavingStreak | null>(null);
 
   // Utility functions for time calculations
@@ -194,12 +195,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
         offPeakHour: monthData.offPeakHour,
       };
 
-      setUsageData(allUsageData);
       setMonthUsage(monthData);
       setPreviousMonthUsage(prevMonth);
       setPrediction(predictionData);
       setInsights(insightsData);
-      setCarbonFootprint(carbonData);
       setSavingStreak(streakData);
     } catch (err) {
       setError("Failed to load dashboard data. Please try again.");
@@ -282,9 +281,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
             />
           )}
 
-          {/* Power Timeline Chart */}
-          <PowerTimelineChart data={usageData} currency={currency} />
-
           {/* Two Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* AI Insights */}
@@ -327,7 +323,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
                     Regularly check appliance health and maintenance.
                   </li>
                   <li className="transition-all duration-300 hover:scale-105 hover:text-blue-600">
-                    Track your usage with Electricity Usage Tracker to spot saving opportunities!
+                    Track your usage with Electricity Usage Tracker to spot
+                    saving opportunities!
                   </li>
                 </ul>
                 <div
@@ -338,9 +335,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
                     right: 0,
                     bottom: 32,
                   }}
-                >
-                 
-                </div>
+                ></div>
               </div>
             </div>
           </div>
@@ -357,19 +352,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
           {/* Comparison and Device Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Month Comparison */}
-            {computedMonthUsage && previousMonthUsage && (
-              <ComparisonChart
-                currentMonth={{
-                  units: computedMonthUsage.totalUnits,
-                  cost: computedMonthUsage.totalCost,
-                }}
-                previousMonth={{
-                  units: previousMonthUsage.totalUnits,
-                  cost: previousMonthUsage.totalCost,
-                }}
-                currency={currency}
-              />
-            )}
+            {/* Month Comparison removed */}
 
             {/* Device Breakdown */}
             <DeviceBreakdownChart devices={devices} currency={currency} />
@@ -390,13 +373,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
   );
 };
 
-
-
-
-
-
-
-
 // import React, { useState, useEffect, useRef } from "react";
 // import {
 //   Card,
@@ -405,11 +381,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
 //   CardHeader,
 //   CardTitle,
 // } from "./ui/card";
-// import { 
-//   Brain, 
-//   ChevronLeft, 
-//   ChevronRight, 
-//   Info, 
+// import {
+//   Brain,
+//   ChevronLeft,
+//   ChevronRight,
+//   Info,
 //   X,
 //   BarChart3,
 //   Cpu,
@@ -752,8 +728,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
 //                         key={index}
 //                         onClick={() => setCurrentSlide(index)}
 //                         className={`w-3 h-3 rounded-full transition-all duration-300 ${
-//                           index === currentSlide 
-//                             ? 'bg-purple-600 scale-125' 
+//                           index === currentSlide
+//                             ? 'bg-purple-600 scale-125'
 //                             : 'bg-gray-300 hover:bg-gray-400'
 //                         }`}
 //                       />
@@ -843,7 +819,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
 //                       <Calculator className="w-6 h-6 text-green-600" />
 //                       Mathematical Foundations
 //                     </h3>
-                    
+
 //                     <div className="space-y-4">
 //                       <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
 //                         <h4 className="font-semibold text-green-800 mb-2">Primary Energy Prediction</h4>
@@ -963,14 +939,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ currency }) => {
 //     </>
 //   );
 // };
-
-
-
-
-
-
-
-
 
 // import React, { useState, useEffect } from "react";
 // import { UsageSummaryCards } from "./UsageSummaryCards";

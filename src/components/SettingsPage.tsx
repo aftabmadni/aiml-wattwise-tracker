@@ -392,19 +392,31 @@ import Magic3DInterface from "./Magic3DInterface";
 //   );
 // };
 
-import React, { useState, useRef } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Label } from './ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Switch } from './ui/switch';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { User, Bell, CreditCard, Shield, Globe, Upload, X } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
-import { userApi } from '../lib/mockApi';
-import { toast } from 'sonner';
+import React, { useState, useRef } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Switch } from "./ui/switch";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { User, Bell, CreditCard, Shield, Globe, Upload, X } from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { userApi } from "../lib/mockApi";
+import { toast } from "sonner";
 
 export const SettingsPage: React.FC = () => {
   const { user } = useAuth();
@@ -413,20 +425,34 @@ export const SettingsPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Profile state
-  const [name, setName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
-  const [avatar, setAvatar] = useState(user?.avatar || '');
+  const [name, setName] = useState(user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [avatar, setAvatar] = useState(user?.avatar || "");
 
   // Preferences state
-  const [currency, setCurrency] = useState<'INR' | 'USD' | 'EUR'>(user?.preferences.currency || 'INR');
-  const [units, setUnits] = useState<'kWh' | 'MWh'>(user?.preferences.units || 'kWh');
-  const [monthlyBudget, setMonthlyBudget] = useState(user?.preferences.monthlyBudget || 2000);
-  const [language, setLanguage] = useState<'en' | 'hi'>(user?.preferences.language || 'en');
+  const [currency, setCurrency] = useState<"INR" | "USD" | "EUR">(
+    user?.preferences.currency || "INR"
+  );
+  const [units, setUnits] = useState<"kWh" | "MWh">(
+    user?.preferences.units || "kWh"
+  );
+  const [monthlyBudget, setMonthlyBudget] = useState(
+    user?.preferences.monthlyBudget || 2000
+  );
+  const [language, setLanguage] = useState<"en" | "hi">(
+    user?.preferences.language || "en"
+  );
 
   // Notification preferences
-  const [emailNotifications, setEmailNotifications] = useState(user?.preferences.notifications.email || true);
-  const [pushNotifications, setPushNotifications] = useState(user?.preferences.notifications.push || true);
-  const [aiInsights, setAiInsights] = useState(user?.preferences.notifications.aiInsights || true);
+  const [emailNotifications, setEmailNotifications] = useState(
+    user?.preferences.notifications.email || true
+  );
+  const [pushNotifications, setPushNotifications] = useState(
+    user?.preferences.notifications.push || true
+  );
+  const [aiInsights, setAiInsights] = useState(
+    user?.preferences.notifications.aiInsights || true
+  );
 
   // Handle file selection
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -434,9 +460,9 @@ export const SettingsPage: React.FC = () => {
     if (!file) return;
 
     // Validate file type
-    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+    const validTypes = ["image/jpeg", "image/jpg", "image/png", "image/gif"];
     if (!validTypes.includes(file.type)) {
-      toast.error('Please select a valid image file (JPG, PNG, GIF)');
+      toast.error("Please select a valid image file (JPG, PNG, GIF)");
       return;
       // ...existing code...
       return (
@@ -449,7 +475,7 @@ export const SettingsPage: React.FC = () => {
 
     // Validate file size (2MB max)
     if (file.size > 2 * 1024 * 1024) {
-      toast.error('Image size must be less than 2MB');
+      toast.error("Image size must be less than 2MB");
       return;
     }
 
@@ -461,47 +487,47 @@ export const SettingsPage: React.FC = () => {
       const imageUrl = e.target?.result as string;
       setAvatar(imageUrl);
       setAvatarLoading(false);
-      toast.success('Photo updated successfully!');
-      
+      toast.success("Photo updated successfully!");
+
       // Save to localStorage for persistence (fallback if updateUser is not available)
       try {
-        const currentUserData = localStorage.getItem('user');
+        const currentUserData = localStorage.getItem("user");
         if (currentUserData) {
           const userData = JSON.parse(currentUserData);
           userData.avatar = imageUrl;
-          localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.setItem("user", JSON.stringify(userData));
         }
       } catch (error) {
-        console.log('Could not save avatar to localStorage');
+        console.log("Could not save avatar to localStorage");
       }
     };
     reader.onerror = () => {
-      toast.error('Failed to load image');
+      toast.error("Failed to load image");
       setAvatarLoading(false);
     };
     reader.readAsDataURL(file);
 
     // Reset the file input
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
   // Remove avatar
   const handleRemoveAvatar = () => {
-    setAvatar('');
-    toast.success('Photo removed successfully');
-    
+    setAvatar("");
+    toast.success("Photo removed successfully");
+
     // Remove from localStorage
     try {
-      const currentUserData = localStorage.getItem('user');
+      const currentUserData = localStorage.getItem("user");
       if (currentUserData) {
         const userData = JSON.parse(currentUserData);
-        userData.avatar = '';
-        localStorage.setItem('user', JSON.stringify(userData));
+        userData.avatar = "";
+        localStorage.setItem("user", JSON.stringify(userData));
       }
     } catch (error) {
-      console.log('Could not remove avatar from localStorage');
+      console.log("Could not remove avatar from localStorage");
     }
   };
 
@@ -513,29 +539,29 @@ export const SettingsPage: React.FC = () => {
   const handleSaveProfile = async () => {
     setLoading(true);
     try {
-      await userApi.updateProfile({ 
-        name, 
+      await userApi.updateProfile({
+        name,
         email,
-        avatar 
+        avatar,
       });
-      
+
       // Update localStorage for persistence
       try {
-        const currentUserData = localStorage.getItem('user');
+        const currentUserData = localStorage.getItem("user");
         if (currentUserData) {
           const userData = JSON.parse(currentUserData);
           userData.name = name;
           userData.email = email;
           userData.avatar = avatar;
-          localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.setItem("user", JSON.stringify(userData));
         }
       } catch (error) {
-        console.log('Could not save profile to localStorage');
+        console.log("Could not save profile to localStorage");
       }
-      
-      toast.success('Profile updated successfully');
+
+      toast.success("Profile updated successfully");
     } catch (error) {
-      toast.error('Failed to update profile');
+      toast.error("Failed to update profile");
     } finally {
       setLoading(false);
     }
@@ -552,13 +578,13 @@ export const SettingsPage: React.FC = () => {
         notifications: {
           email: emailNotifications,
           push: pushNotifications,
-          aiInsights
-        }
+          aiInsights,
+        },
       });
-      
+
       // Update localStorage for preferences
       try {
-        const currentUserData = localStorage.getItem('user');
+        const currentUserData = localStorage.getItem("user");
         if (currentUserData) {
           const userData = JSON.parse(currentUserData);
           userData.preferences = {
@@ -569,18 +595,18 @@ export const SettingsPage: React.FC = () => {
             notifications: {
               email: emailNotifications,
               push: pushNotifications,
-              aiInsights
-            }
+              aiInsights,
+            },
           };
-          localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.setItem("user", JSON.stringify(userData));
         }
       } catch (error) {
-        console.log('Could not save preferences to localStorage');
+        console.log("Could not save preferences to localStorage");
       }
-      
-      toast.success('Preferences updated successfully');
+
+      toast.success("Preferences updated successfully");
     } catch (error) {
-      toast.error('Failed to update preferences');
+      toast.error("Failed to update preferences");
     } finally {
       setLoading(false);
     }
@@ -594,7 +620,7 @@ export const SettingsPage: React.FC = () => {
     if (user?.name) {
       return user.name.charAt(0).toUpperCase();
     }
-    return 'U';
+    return "U";
   };
 
   return (
@@ -644,23 +670,23 @@ export const SettingsPage: React.FC = () => {
               <div className="flex items-center gap-6">
                 <div className="relative group">
                   <Avatar className="h-24 w-24 ring-4 ring-white shadow-lg">
-                    <AvatarImage 
-                      src={avatar} 
-                      alt={name || user?.name} 
+                    <AvatarImage
+                      src={avatar}
+                      alt={name || user?.name}
                       className="object-cover"
                     />
                     <AvatarFallback className="text-xl font-semibold bg-gradient-to-br from-blue-500 to-purple-600 text-white">
                       {getAvatarFallback()}
                     </AvatarFallback>
                   </Avatar>
-                  
+
                   {/* Loading overlay */}
                   {avatarLoading && (
                     <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                     </div>
                   )}
-                  
+
                   {/* Hover overlay */}
                   <div className="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center space-x-1">
                     <Button
@@ -686,19 +712,19 @@ export const SettingsPage: React.FC = () => {
 
                 <div className="space-y-3">
                   <div className="space-y-2">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       onClick={handleChangePhotoClick}
                       disabled={avatarLoading}
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      {avatar ? 'Change Photo' : 'Upload Photo'}
+                      {avatar ? "Change Photo" : "Upload Photo"}
                     </Button>
-                    
+
                     {avatar && (
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         size="sm"
                         onClick={handleRemoveAvatar}
                         disabled={avatarLoading}
@@ -708,7 +734,7 @@ export const SettingsPage: React.FC = () => {
                       </Button>
                     )}
                   </div>
-                  
+
                   <p className="text-xs text-gray-500 max-w-xs">
                     JPG, GIF or PNG. Max size of 2MB.
                   </p>
@@ -748,14 +774,14 @@ export const SettingsPage: React.FC = () => {
 
               <div className="flex gap-3">
                 <Button onClick={handleSaveProfile} disabled={loading}>
-                  {loading ? 'Saving...' : 'Save Changes'}
+                  {loading ? "Saving..." : "Save Changes"}
                 </Button>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={() => {
-                    setName(user?.name || '');
-                    setEmail(user?.email || '');
-                    setAvatar(user?.avatar || '');
+                    setName(user?.name || "");
+                    setEmail(user?.email || "");
+                    setAvatar(user?.avatar || "");
                   }}
                 >
                   Reset
@@ -777,12 +803,16 @@ export const SettingsPage: React.FC = () => {
                 <Avatar className="h-16 w-16">
                   <AvatarImage src={avatar} alt={name} />
                   <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                    {name ? name.charAt(0).toUpperCase() : 'U'}
+                    {name ? name.charAt(0).toUpperCase() : "U"}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="font-semibold text-lg">{name || 'Your Name'}</h3>
-                  <p className="text-gray-600 text-sm">{email || 'your.email@example.com'}</p>
+                  <h3 className="font-semibold text-lg">
+                    {name || "Your Name"}
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    {email || "your.email@example.com"}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -832,14 +862,11 @@ export const SettingsPage: React.FC = () => {
                     Receive personalized AI-generated recommendations
                   </p>
                 </div>
-                <Switch
-                  checked={aiInsights}
-                  onCheckedChange={setAiInsights}
-                />
+                <Switch checked={aiInsights} onCheckedChange={setAiInsights} />
               </div>
 
               <Button onClick={handleSavePreferences} disabled={loading}>
-                {loading ? 'Saving...' : 'Save Preferences'}
+                {loading ? "Saving..." : "Save Preferences"}
               </Button>
             </CardContent>
           </Card>
@@ -865,7 +892,9 @@ export const SettingsPage: React.FC = () => {
                       <p className="text-xs text-gray-500">Expires 12/25</p>
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm">Remove</Button>
+                  <Button variant="ghost" size="sm">
+                    Remove
+                  </Button>
                 </div>
               </div>
 
@@ -901,7 +930,10 @@ export const SettingsPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="currency">Currency</Label>
-                  <Select value={currency} onValueChange={(v) => setCurrency(v as any)}>
+                  <Select
+                    value={currency}
+                    onValueChange={(v) => setCurrency(v as any)}
+                  >
                     <SelectTrigger id="currency">
                       <SelectValue />
                     </SelectTrigger>
@@ -915,7 +947,10 @@ export const SettingsPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="units">Energy Units</Label>
-                  <Select value={units} onValueChange={(v) => setUnits(v as any)}>
+                  <Select
+                    value={units}
+                    onValueChange={(v) => setUnits(v as any)}
+                  >
                     <SelectTrigger id="units">
                       <SelectValue />
                     </SelectTrigger>
@@ -928,7 +963,10 @@ export const SettingsPage: React.FC = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="language">Language</Label>
-                  <Select value={language} onValueChange={(v) => setLanguage(v as any)}>
+                  <Select
+                    value={language}
+                    onValueChange={(v) => setLanguage(v as any)}
+                  >
                     <SelectTrigger id="language">
                       <SelectValue />
                     </SelectTrigger>
@@ -940,7 +978,10 @@ export const SettingsPage: React.FC = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="budget">Monthly Budget ({currency === 'INR' ? '₹' : currency === 'USD' ? '$' : '€'})</Label>
+                  <Label htmlFor="budget">
+                    Monthly Budget (
+                    {currency === "INR" ? "₹" : currency === "USD" ? "$" : "€"})
+                  </Label>
                   <Input
                     id="budget"
                     type="number"
@@ -951,7 +992,7 @@ export const SettingsPage: React.FC = () => {
               </div>
 
               <Button onClick={handleSavePreferences} disabled={loading}>
-                {loading ? 'Saving...' : 'Save Preferences'}
+                {loading ? "Saving..." : "Save Preferences"}
               </Button>
             </CardContent>
           </Card>
@@ -1011,7 +1052,10 @@ export const SettingsPage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Button variant="outline" className="w-full text-red-600 border-red-200 hover:bg-red-50">
+                <Button
+                  variant="outline"
+                  className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                >
                   Delete All Data
                 </Button>
                 <Button variant="destructive" className="w-full">

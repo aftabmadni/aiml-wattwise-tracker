@@ -17,7 +17,15 @@ const AnimatedBox = () => (
 
 const Magic3DInterface: React.FC = () => {
   return (
-    <div style={{ width: "100%", height: "400px", borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.12)" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "400px",
+        borderRadius: 16,
+        overflow: "hidden",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
+      }}
+    >
       <Canvas camera={{ position: [2, 2, 2] }}>
         <ambientLight intensity={0.7} />
         <directionalLight position={[5, 5, 5]} intensity={1} />

@@ -141,7 +141,8 @@ export const usageApi = {
 
     // Only use real appliances; if none, return empty data
     if (!usageDataCache) {
-      usageDataCache = applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
+      usageDataCache =
+        applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
     }
 
     const now = new Date();
@@ -178,7 +179,8 @@ export const usageApi = {
     }
     // Only use real appliances; if none, return empty data
     if (!usageDataCache) {
-      usageDataCache = applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
+      usageDataCache =
+        applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
     }
 
     return calculateAggregatedUsage(usageDataCache, period);
@@ -239,7 +241,8 @@ export const insightsApi = {
       applianceIds = currentUser.appliances.map((a: any) => a.id);
     }
     if (!usageDataCache) {
-      usageDataCache = applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
+      usageDataCache =
+        applianceIds.length > 0 ? generateUsageData(12, applianceIds) : [];
     }
 
     const monthData = await usageApi.getAggregatedUsage("month");
